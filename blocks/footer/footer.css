@@ -1,6 +1,7 @@
 footer {
   padding: 2rem;
-  background-color: var(--light-color);
+  background-color: var(--footer-color);
+  color: var(--light-color);
   font-size: var(--body-font-size-s);
 }
 
@@ -11,4 +12,86 @@ footer .footer {
 
 footer .footer p {
   margin: 0;
+}
+
+footer .footer .footer-columns.block > div {
+  width: 100%;
+  display: flex;
+}
+
+footer .footer .footer-columns.block > div > div {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* for california privacy link */
+footer .footer .footer-columns.block div p:not(.button-container) a {
+  color: var(--light-color);
+  position: relative;
+  border-bottom: 1px solid var(--footer-color);
+}
+
+footer .footer .footer-columns.block div p:not(.button-container) a:hover {
+  text-decoration: none;
+  border-bottom: solid 1px var(--light-color);
+}
+
+footer .footer .footer-columns.block div p picture {
+  position: relative;
+  margin: 2px 0 0 4px;
+}
+
+footer .footer .footer-columns.block div p picture img {
+  width: 30px;
+  height: 14px;
+}
+
+footer .footer .footer-columns.block div p {
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  color: var(--light-color);
+  font-size: 1rem;
+  display: flex;
+  width: fit-content;
+  margin-top: 16px;
+  border-bottom: 1px solid var(--footer-color);
+}
+
+footer .footer .footer-columns.block div .button-container a {
+  background-color: transparent;
+  border-radius: 0;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  color: var(--light-color);
+  font-size: 1rem;
+  display: block;
+  border-bottom: 1px solid var(--footer-color);
+}
+
+footer .footer .footer-columns.block div .button-container a:hover,
+footer .footer .footer-columns.block div p:hover {
+  border-bottom: 1px solid var(--light-color);
+  cursor: pointer;
+}
+
+
+/* for last column with special spacing */
+footer .footer .footer-columns.block > div > div:last-of-type {
+  padding-top: 16px;
+}
+
+footer .footer .footer-columns.block > div > div:last-of-type p {
+  margin: 0;
+}
+
+footer .footer .footer-columns.block > div > div:last-of-type p:hover {
+  cursor: default;
+  text-decoration: none;
+}
+
+footer .footer .footer-columns.block > div > div:last-of-type p:last-of-type{
+  margin-top: 56px;
 }
