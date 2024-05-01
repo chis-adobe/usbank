@@ -13,11 +13,14 @@
 :root {
   /* colors */
   --link-color: #035fe6;
-  --link-hover-color: #136ff6;
+  --link-hover-color: #235ae4;
   --background-color: white;
-  --light-color: #eee;
-  --dark-color: #ccc;
-  --text-color: black;
+  --light-color: #fff;
+  --dark-color: #ccccd2;
+  --text-color: #2e2e32;;
+  --heading-color: #001e79;
+  --highlighted-color: #f5f5fa;
+  --footer-color: #011d78;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback;
@@ -51,7 +54,7 @@
 @media (width >= 900px) {
   :root {
     --heading-font-size-xxl: 60px;
-    --heading-font-size-xl: 48px;
+    --heading-font-size-xl: 30px;
     --heading-font-size-l: 36px;
     --heading-font-size-m: 30px;
     --heading-font-size-s: 24px;
@@ -85,6 +88,7 @@ h4, h5, h6 {
   margin-top: 1em;
   margin-bottom: .5em;
   scroll-margin: calc(var(--nav-height) + 1em);
+  color: var(--heading-color);
 }
 
 h1 { font-size: var(--heading-font-size-xxl) }
@@ -206,5 +210,5 @@ main .section {
 /* section metadata */
 main .section.light,
 main .section.highlight {
-  background-color: var(--light-color);
+  background-color: var(--highlighted-color);
 }
