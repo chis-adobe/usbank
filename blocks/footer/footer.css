@@ -1,5 +1,5 @@
 footer {
-  padding: 2rem;
+  padding: 32px 2rem 88px 2rem;
   background-color: var(--footer-color);
   color: var(--light-color);
   font-size: var(--body-font-size-s);
@@ -14,9 +14,21 @@ footer .footer p {
   margin: 0;
 }
 
+/* footer socials section */
+footer .footer .socials-wrapper .socials {
+  display: flex;
+}
+
+footer .footer .socials-wrapper .socials > div {
+  margin-right: 32px;
+  height: 70.5px;
+}
+
+/* footer columns section */
 footer .footer .footer-columns.block > div {
   width: 100%;
   display: flex;
+  padding-top: 16px;
 }
 
 footer .footer .footer-columns.block > div > div {
