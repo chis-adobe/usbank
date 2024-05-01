@@ -3,16 +3,36 @@ import { createOptimizedPicture } from '../../scripts/aem.js';
 export default function decorate(block) {
   /* change to ul, li */
   const ul = document.createElement('ul');
+  
+
+
+
   [...block.children].forEach((row) => {
+    const anchor = document.createElement('a');
+    anchor.href = '';
     const li = document.createElement('li');
+    
     while (row.firstElementChild) li.append(row.firstElementChild);
+
     [...li.children].forEach((div) => {
-      if (div.children.length === 1 && div.querySelector('span')) div.className = 'cards-card-image';
-      else div.className = 'cards-card-body';
+      if(div.children.length === 1 && div.querySelector('a')){
+        const linkURL = div.querySelector('a').innerHTML;
+        anchor.href = linkURL;
+        div.className = 'cards-hide-markdown'
+      } else if(div.children.length === 1 && div.querySelector('picture')){ 
+        div.className = 'cards-card-image'
+      } else if(div.children.length === 1 && div.querySelector('span')) {
+        div.className = 'cards-card-icon'
+      } else {
+        div.className = 'cards-card-body'
+      }
     });
-    ul.append(li);
+    anchor.append(li);
+    ul.append(anchor);
   });
-  // ul.querySelectorAll('img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
+
+  const iconCards = document.querySelectorAll(".cards.icon");
+  if(!iconCards) ul.querySelectorAll('img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
   block.textContent = '';
   block.append(ul);
 }
