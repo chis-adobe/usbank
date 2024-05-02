@@ -134,7 +134,63 @@
   filter: invert(10%) sepia(67%) saturate(3125%) hue-rotate(218deg) brightness(109%) contrast(115%);
 }
 
-/* featured-stories cards styles */
-.cards.featured-stories {
+/* articles cards styles */
+.cards.articles {
+  padding: 0
+}
+
+.cards.articles ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 24px 30px;
+}
+
+.cards.articles ul li {
+  display: flex;
+  flex-direction: column;
+}
+
+.cards.articles .cards-card-image img {
+  max-height: 200px;
+}
+
+.cards.articles .cards-card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 1.5rem;
+}
+
+.cards.articles .cards-card-body h5 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin-top: 1rem;
+}
+
+.cards.articles .cards-card-body p.button-container {
+  margin: 0;
+}
+
+.cards.articles .cards-card-body a {
+  margin: 0;
+}
+
+.cards.articles .cards-card-body a {
+  background-color: unset;
   padding: 0;
+  color: var(--link-color);
+}
+
+@media (width <= 768px) {
+  .cards.articles ul {
+    grid-template-columns: unset;
+    width: unset;
+    padding: 0 1rem;
+  }
+
+  .cards.articles .cards-card-image img {
+    max-height: unset;
+  }
 }
