@@ -25,15 +25,25 @@ function buildHeroBlock(main) {
   const subheading = main.querySelector('h4');
   const heroCopy = main.querySelector('h5');
   const heroTextWrapper = document.createElement('div');
+  const heroContent = document.createElement('div');
+  const heroImageWrapper = document.createElement('div');
+  heroImageWrapper.className = 'hero-image-wrapper';
+  heroContent.className = 'hero-content-wrapper';
   heroTextWrapper.className = 'hero-text-wrapper';
+  
   heroTextWrapper.append(subheading);
   heroTextWrapper.append(h1);
   heroTextWrapper.append(heroCopy);
 
+  heroContent.append(heroTextWrapper)
+  heroImageWrapper.append(picture);
+
+
+
   // eslint-disable-next-line no-bitwise
   if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
     const section = document.createElement('div');
-    section.append(buildBlock('hero', { elems: [picture, heroTextWrapper] }));
+    section.append(buildBlock('hero', { elems: [heroContent, heroImageWrapper] }));
     main.prepend(section);
   }
 }
