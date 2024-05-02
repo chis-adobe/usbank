@@ -17,7 +17,8 @@
   --background-color: white;
   --light-color: #fff;
   --dark-color: #ccccd2;
-  --text-color: #2e2e32;;
+  --subheading-color:#66666a;
+  --text-color: #2e2e32;
   --heading-color: #001e79;
   --highlighted-color: #f5f5fa;
   --footer-color: #011d78;
@@ -54,7 +55,7 @@
 @media (width >= 900px) {
   :root {
     --heading-font-size-xxl: 60px;
-    --heading-font-size-xl: 30px;
+    --heading-font-size-xl: 38px;
     --heading-font-size-l: 36px;
     --heading-font-size-m: 30px;
     --heading-font-size-s: 24px;
@@ -85,6 +86,7 @@ h4, h5, h6 {
   font-family: var(--heading-font-family);
   font-weight: 600;
   line-height: 1.25;
+  letter-spacing: 0.03rem;
   margin-top: 1em;
   margin-bottom: .5em;
   scroll-margin: calc(var(--nav-height) + 1em);
@@ -190,7 +192,7 @@ main img {
 }
 
 /* sections */
-main .section {
+/* main .section {
   padding: 64px 16px;
 }
 
@@ -198,7 +200,7 @@ main .section {
   main .section {
     padding: 64px 32px;
   }
-}
+} */
 
 @media (width >= 900px) {
   .section > div {
