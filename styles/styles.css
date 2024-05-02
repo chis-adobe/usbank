@@ -22,6 +22,8 @@
   --heading-color: #001e79;
   --highlighted-color: #f5f5fa;
   --footer-color: #011d78;
+  --button-primary-color: #cf2a36;
+  --button-hover-color: #9b0a28;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback;
@@ -42,7 +44,7 @@
   --heading-font-size-xs: 18px;
 
   /* nav height */
-  --nav-height: 64px;
+  --nav-height: 147px;
 }
 
 @font-face {
@@ -77,9 +79,9 @@ body.appear {
   display: block;
 }
 
-header {
+/* header {
   height: var(--nav-height);
-}
+} */
 
 h1, h2, h3,
 h4, h5, h6 {
@@ -144,22 +146,24 @@ a.button:any-link, button {
   box-sizing: border-box;
   text-decoration: none;
   border: 2px solid transparent;
-  padding: 5px 30px;
+  font-size: .875rem;
+  padding: .5rem .75rem;
   text-align: center;
   font-style: normal;
   font-weight: 600;
   cursor: pointer;
-  color: var(--background-color);
-  background-color: var(--link-color);
+  color: var(--light-color);
+  background-color: var(--button-primary-color);
   margin: 16px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border-radius: 30px;
+  border-radius: .25rem;
+  transition: .4s ease-in-out;
 }
 
 a.button:hover, a.button:focus, button:hover, button:focus  {
-  background-color: var(--link-hover-color);
+  background-color: var(--button-hover-color);
   cursor: pointer;
 }
 
