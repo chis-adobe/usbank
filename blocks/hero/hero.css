@@ -7,7 +7,7 @@ main .hero-container {
 }
 
 /* hero container & image positioning for full-bleed */
-.hero > div > div > p  {
+.hero {
   position: relative;
   min-height: 555px;
   margin: 0;
@@ -33,17 +33,18 @@ main .hero-container {
 }
 
 /* hero content positioning */
-.hero div > div > p > .hero-content-wrapper {
+.hero .hero-cta-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 80px 0;
+  /* position: relative; */
 }
 
 /* controls styles of white text box */
-.hero .hero-text-wrapper {
+.hero .hero-textbox {
   background-color: var(--light-color);
-  width: fit-content;
   padding: 1.5rem;
+  width: fit-content;
   box-shadow: 0 .1rem .4rem 0 rgba(0, 0, 0, .05), 0 .2rem .8rem .3rem rgba(0, 0, 0, .03), 0 .2rem 1.6rem .6rem rgba(0, 0, 0, .05);
 }
 
@@ -52,6 +53,7 @@ main .hero-container {
   text-transform: uppercase;
   font-size: .875rem;
   font-weight: 600;
+  letter-spacing: 0.05rem;
   margin: 0;
   width: fit-content;
   margin-bottom: 0.75rem;
@@ -69,7 +71,8 @@ main .hero-container {
 
 .hero h5 {
   font-weight: normal;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5rem;
   color: #4c4c50;
   margin: 0;
   width: fit-content;

@@ -4,8 +4,9 @@
  */
 
 export default async function decorate(block) {
-	const blockChildren = block.children[0];
-	[...blockChildren.children].forEach((child) => {
+	const imgBlockChildren = block.children[0];
+	imgBlockChildren.className = 'hero-image-wrapper';
+	[...imgBlockChildren.children].forEach((child) => {
 	  const pictureElement = child.querySelectorAll('picture');
 	  if (pictureElement.length > 0) {
 		pictureElement.forEach((pic, index) => {
@@ -16,13 +17,16 @@ export default async function decorate(block) {
 		  }
 		  child.className = 'hero-image';
 		});
-	  } else {
-		child.className = 'hero-desc-wrapper';
-		const buttonLink = child.querySelector('.button-container a');
-		buttonLink?.classList.remove('button', 'button-primary');
-		buttonLink?.classList.add('button-primary');
 	  }
 	});
+
+	if (block.children.length > 1) {
+		const textBlockChildren = block.children[1];
+		textBlockChildren.className = 'hero-cta-wrapper';
+		[...textBlockChildren.children].forEach((child) => {
+			child.className = 'hero-textbox';
+		});
+	};
   
 	const imageElements = block.querySelectorAll('img');
 	imageElements.forEach((img) => {
