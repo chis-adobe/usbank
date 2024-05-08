@@ -36,7 +36,7 @@
   --body-font-size-xs: 16px;
 
   /* heading sizes */
-  --heading-font-size-xxl: 48px;
+  --heading-font-size-xxl: 44px;
   --heading-font-size-xl: 40px;
   --heading-font-size-l: 32px;
   --heading-font-size-m: 24px;
@@ -223,6 +223,10 @@ main .section.highlight {
 .cards-container {
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.cards-container .default-content-wrapper h2 {
+  margin: 0 0 20px 0;
 }
 
 .cards-container.highlight {

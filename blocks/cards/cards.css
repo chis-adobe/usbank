@@ -160,12 +160,13 @@
   justify-content: space-between;
   height: 100%;
   gap: 1.5rem;
+  padding-bottom: 32px;
 }
 
 .cards.articles .cards-card-body h5 {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
-  color: #000;
+  color: var(--text-color);
   margin-top: 1rem;
 }
 
@@ -174,13 +175,42 @@
 }
 
 .cards.articles .cards-card-body a {
-  margin: 0;
-}
-
-.cards.articles .cards-card-body a {
   background-color: unset;
   padding: 0;
   color: var(--link-color);
+  display: block;
+  position: relative;
+  min-width: 94px;
+  margin: 0;
+  max-width: fit-content;
+  padding: 0.25rem 20px 0.25rem 0;
+  font-size: 15px;
+}
+
+.cards.articles .cards-card-body a:focus {
+  border-radius: 0.5rem;
+  border: solid var(--link-color) 2px;
+}
+
+.cards.articles .cards-card-body a:hover {
+  text-decoration: underline;
+  text-underline-position: under;
+  transition: all 0.2s ease-in;
+}
+
+.cards.articles .cards-card-body a span {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-40%);
+  display: inline-flex;
+}
+
+.cards.articles .cards-card-body a span img {
+  width: 16px;
+  height: 16px;
+  display: block;
+  filter: invert(24%) sepia(68%) saturate(5493%) hue-rotate(210deg) brightness(96%) contrast(98%);
 }
 
 @media (width <= 768px) {

@@ -75,7 +75,6 @@ footer .footer .footer-columns.block div p {
   display: flex;
   width: fit-content;
   margin-top: 16px;
-  border-bottom: 1px solid var(--footer-color);
 }
 
 footer .footer .footer-columns.block div .button-container a {
@@ -87,12 +86,12 @@ footer .footer .footer-columns.block div .button-container a {
   color: var(--light-color);
   font-size: 1rem;
   display: block;
-  border-bottom: 1px solid var(--footer-color);
 }
 
 footer .footer .footer-columns.block div .button-container a:hover,
 footer .footer .footer-columns.block div p:hover {
-  border-bottom: 1px solid var(--light-color);
+  text-decoration: underline;
+  text-underline-position: under;
   cursor: pointer;
 }
 
