@@ -7,25 +7,25 @@ main .hero-container {
 }
 
 /* hero container & image positioning for full-bleed */
-.hero {
+.hero.main {
   position: relative;
   min-height: 555px;
   margin: 0;
 }
 
-.hero .hero-image-wrapper {
+.hero.main .hero-image-wrapper {
   position: absolute;
   left: 0;
   top: 0;
   z-index: -1;
 }
 
-.hero .hero-image-wrapper picture {
+.hero.main .hero-image-wrapper picture {
   inset: 0;
   box-sizing: border-box;
 }
 
-.hero img {
+.hero.main img {
   object-fit: cover;
   width: 100%;
   height: 555px;
@@ -33,15 +33,14 @@ main .hero-container {
 }
 
 /* hero content positioning */
-.hero .hero-cta-wrapper {
+.hero.main .hero-cta-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 80px 0;
-  /* position: relative; */
 }
 
 /* controls styles of white text box */
-.hero .hero-textbox {
+.hero.main .hero-textbox {
   background-color: var(--light-color);
   padding: 1.5rem;
   width: fit-content;
@@ -81,3 +80,33 @@ main .hero-container {
 
 
 
+/* article page hero styles */
+.hero.article .hero-image-wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+  max-width: 1200px;
+  margin: 48px auto 0;
+}
+
+.hero.article .hero-image-wrapper div:nth-child(2) h1 {
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  font-size: 2.5rem;
+  margin: 0 0 1.25rem;
+  color: var(--heading-color);
+}
+
+.hero.article .hero-image-wrapper div:nth-child(2) p {
+  line-height: 1.6;
+  letter-spacing: .01em;
+  font-weight: 400;
+  font-size: 1rem;
+  margin: 0 0 .5rem;
+}
+
+.hero.article img {
+  object-fit: cover;
+  height: 630px;
+  width: 100%;
+}
