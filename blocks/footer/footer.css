@@ -48,12 +48,10 @@ footer .footer .footer-columns.block > div > div {
 footer .footer .footer-columns.block div p:not(.button-container) a {
   color: var(--light-color);
   position: relative;
-  border-bottom: 1px solid var(--footer-color);
 }
 
 footer .footer .footer-columns.block div p:not(.button-container) a:hover {
   text-decoration: none;
-  border-bottom: solid 1px var(--light-color);
 }
 
 footer .footer .footer-columns.block div p picture {
@@ -112,4 +110,61 @@ footer .footer .footer-columns.block > div > div:last-of-type p:hover {
 
 footer .footer .footer-columns.block > div > div:last-of-type p:last-of-type{
   margin-top: 56px;
+}
+
+
+@media (width <= 900px) {
+  footer {
+    padding: 32px 2rem 48px 2rem;
+  }
+
+  footer .footer .default-content-wrapper span img {
+    height: 32px;
+    width: 32px;
+  }
+
+  footer .footer .footer-columns.block > div {
+    flex-wrap: wrap;
+  }
+
+  footer .footer .footer-columns.block > div > div {
+    width: 49%;
+  }
+
+  footer .footer .footer-columns.block div p,
+  footer .footer .footer-columns.block div .button-container a {
+    font-size: 0.85rem;
+  }
+
+  footer .footer .footer-columns.block > div > div:first-of-type {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  footer .footer .footer-columns.block > div > div:first-of-type p {
+    width: 49%;
+  }
+
+  footer .footer .footer-columns.block > div > div:last-of-type {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: solid 1px var(--light-color);
+    margin-top: 32px;
+  }
+
+  footer .footer .footer-columns.block > div > div:last-of-type p {
+    width: 49%;
+  }
+
+  footer .footer .footer-columns.block > div > div:last-of-type p:last-of-type {
+    margin: 0;
+  }
+}
+
+@media (width <= 600px) {
+  footer {
+    padding: 32px 1rem 88px 1rem;
+  }
 }
