@@ -79,6 +79,11 @@ main .hero-container {
 }
 
 /* article page hero styles */
+.hero.article {
+  padding: 0 2rem;
+  margin-bottom: 80px;
+}
+
 .hero.article .hero-image-wrapper {
   display: flex;
   flex-direction: column-reverse;
@@ -101,11 +106,12 @@ main .hero-container {
   letter-spacing: .01em;
   font-weight: 400;
   font-size: 1rem;
-  margin: 0 0 .5rem;
+  margin: 0 0 0.5rem;
 }
 
 .hero.article img {
   object-fit: cover;
+  display: block;
   height: 630px;
   width: 100%;
 }
@@ -146,7 +152,8 @@ main .hero-container {
   }
 
   .hero.article {
-    padding: 0 1rem;
+    padding: 0 2rem;
+    margin-bottom: 40px;
   }
 
   .hero.article .hero-image-wrapper div:nth-child(2) h1 {
@@ -158,7 +165,7 @@ main .hero-container {
   }
 
   .hero.article img {
-    height: 264px;
+    height: 50vw;
   }
 }
 
@@ -170,5 +177,13 @@ main .hero-container {
 
   .hero.main img {
     height: 70vw;
+  }
+
+  .hero.article {
+    padding: 0 1rem;
+  }
+
+  .hero.article img {
+    height: 264px;
   }
 }

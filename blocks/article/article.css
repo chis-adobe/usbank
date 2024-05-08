@@ -94,7 +94,7 @@
 @media (width <= 900px) {
 	.article-wrapper > .article {
 		grid-template-columns: repeat(4, 1fr);
-		padding: 40px 1rem 1rem;
+		padding: 40px 0 1rem;
 	}
 	
 	.article-content-wrapper {

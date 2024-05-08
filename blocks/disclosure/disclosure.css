@@ -50,6 +50,5 @@
 
 	.disclosure > div {
 		grid-column: 1/ span 8;
-		padding: 1rem;
 	}
 }

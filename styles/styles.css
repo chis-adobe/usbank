@@ -196,15 +196,15 @@ main img {
 }
 
 /* sections */
-/* main .section {
-  padding: 64px 16px;
-} */
+main .section {
+  padding: 0 16px;
+}
 
-/* @media (width >= 600px) {
+@media (width >= 600px) {
   main .section {
-    padding: 64px 32px;
+    padding: 0 32px;
   }
-} */
+}
 
 @media (width >= 900px) {
   .section > div {
@@ -226,12 +226,12 @@ main .section.highlight {
   }
 }
 
-.cards-container .default-content-wrapper {
-  padding: 0 2rem;
-}
-
 @media (width >= 900px) {
   .cards-container .default-content-wrapper {
+    padding: 64px 0;
+  }
+
+  .cards-container.highlight .default-content-wrapper {
     padding: 0;
   }
 }
@@ -247,16 +247,12 @@ main .section.highlight {
 
 @media (width <= 900px) {
   .cards-container .default-content-wrapper {
-    padding: 0 2rem;
+    padding: 0;
   }
 }
 
 @media (width <= 600px) {
   .cards-container.highlight {
-    padding: 48px 0;
-  }
-
-  .cards-container .default-content-wrapper {
-    padding: 0 1rem;
+    padding: 48px 1rem;
   }
 }
