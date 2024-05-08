@@ -15,23 +15,21 @@ export default async function decorate(block) {
   }
 
   const ul = document.createElement('ul');
-
+  
   if (isIconCards) {
     [...block.children].forEach((row) => {
       const anchor = document.createElement('a');
       anchor.href = '';
       const li = document.createElement('li');
-      
       while (row.firstElementChild) li.append(row.firstElementChild);
-
       [...li.children].forEach((div) => {
-        if(div.children.length === 1 && div.querySelector('a')){
+        if (div.children.length === 1 && div.querySelector('a')) {
           const linkURL = div.querySelector('a').innerHTML;
           anchor.href = linkURL;
           div.className = 'cards-hide-markdown'
-        } else if(div.children.length === 1 && div.querySelector('picture')){ 
+        } else if (div.children.length === 1 && div.querySelector('picture')) { 
           div.className = 'cards-card-image'
-        } else if(div.children.length === 1 && div.querySelector('span')) {
+        } else if (div.children.length === 1 && div.querySelector('span')) {
           div.className = 'cards-card-icon'
         } else {
           div.className = 'cards-card-body'
@@ -45,7 +43,6 @@ export default async function decorate(block) {
   if (isArticleCards) {
     const link = block.querySelector('a');
     const cardData = await fetchJson(link);
-
     cardData.forEach((item) => {
       const picture = createOptimizedPicture(item.image, item.title, false, [{ width: 320 }]);
       picture.lastElementChild.width = '320';
@@ -69,7 +66,6 @@ export default async function decorate(block) {
       `;
       ul.append(createdCard);
     });
-
   }
 
   block.textContent = '';
