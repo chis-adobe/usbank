@@ -178,3 +178,7 @@ header nav .nav-tools ul li:last-of-type:before {
   padding: 0 12px;
   width: fit-content;
 }
+
+@media (width <= 900px) {
+
+}
