@@ -15,7 +15,7 @@ export default async function decorate(block) {
   }
 
   const ul = document.createElement('ul');
-  
+
   if (isIconCards) {
     [...block.children].forEach((row) => {
       const anchor = document.createElement('a');
@@ -26,13 +26,13 @@ export default async function decorate(block) {
         if (div.children.length === 1 && div.querySelector('a')) {
           const linkURL = div.querySelector('a').innerHTML;
           anchor.href = linkURL;
-          div.className = 'cards-hide-markdown'
-        } else if (div.children.length === 1 && div.querySelector('picture')) { 
-          div.className = 'cards-card-image'
+          div.className = 'cards-hide-markdown';
+        } else if (div.children.length === 1 && div.querySelector('picture')) {
+          div.className = 'cards-card-image';
         } else if (div.children.length === 1 && div.querySelector('span')) {
-          div.className = 'cards-card-icon'
+          div.className = 'cards-card-icon';
         } else {
-          div.className = 'cards-card-body'
+          div.className = 'cards-card-body';
         }
       });
       anchor.append(li);
