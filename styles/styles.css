@@ -235,7 +235,7 @@ main .section.highlight {
 
 @media (width >= 900px) {
   .cards-container .default-content-wrapper {
-    padding: 64px 0;
+    padding: 64px 0 0;
   }
 
   .cards-container.highlight .default-content-wrapper {
