@@ -222,13 +222,12 @@ main .section.highlight {
 /* section styles */
 @media (width >= 900px) {
   .cards-container {
-    padding-top: 48px;
-    padding-bottom: 0;
+    padding: 48px 2rem 0;
   }
 }
 
 .cards-container .default-content-wrapper {
-  padding: 0 16px;
+  padding: 0 2rem;
 }
 
 @media (width >= 900px) {
@@ -243,12 +242,21 @@ main .section.highlight {
 }
 
 .cards-container.highlight {
-  padding: 80px 0;
+  padding: 80px 2rem;
 }
 
-
 @media (width <= 900px) {
+  .cards-container .default-content-wrapper {
+    padding: 0 2rem;
+  }
+}
+
+@media (width <= 600px) {
   .cards-container.highlight {
     padding: 48px 0;
+  }
+
+  .cards-container .default-content-wrapper {
+    padding: 0 1rem;
   }
 }
