@@ -12,6 +12,7 @@ export default async function decorate(block) {
       const data = jsonData?.data;
       return data;
     }
+    return 'an error occurred';
   }
 
   const ul = document.createElement('ul');
