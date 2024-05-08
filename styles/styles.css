@@ -220,9 +220,21 @@ main .section.highlight {
 }
 
 /* section styles */
-.cards-container {
-  padding-top: 48px;
-  padding-bottom: 0;
+@media (width >= 900px) {
+  .cards-container {
+    padding-top: 48px;
+    padding-bottom: 0;
+  }
+}
+
+.cards-container .default-content-wrapper {
+  padding: 0 16px;
+}
+
+@media (width >= 900px) {
+  .cards-container .default-content-wrapper {
+    padding: 0;
+  }
 }
 
 .cards-container .default-content-wrapper h2 {
