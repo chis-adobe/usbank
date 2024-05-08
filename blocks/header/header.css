@@ -3,12 +3,12 @@ header .nav-wrapper {
   background-color: var(--light-color);
   width: 100%;
   z-index: 2;
-  /* position: fixed; */
 }
 
 header nav {
   box-sizing: border-box;
-  /* height: var(--nav-height); */
+  width: 100%;
+  height: var(--nav-height);
   font-family: var(--body-font-family);
   display: grid;
   grid-template-columns: 1fr;
@@ -31,11 +31,18 @@ header nav .nav-hamburger {
 }
 
 /* set section widths */
+header .nav-brand,
+header .nav-tools,
+header .nav-sections {
+  width: 100%;
+}
+
 header .nav-brand .default-content-wrapper,
 header .nav-tools .default-content-wrapper,
 header .nav-sections .default-content-wrapper {
   margin: 0 auto;
   max-width: 1200px;
+  padding: 0 2rem;
 }
 
 /* brand */
@@ -64,6 +71,11 @@ header .nav-brand ul {
   margin: 14px 0;
 }
 
+header nav .nav-brand .default-content-wrapper p:last-of-type {
+  display: none;
+  visibility: hidden;
+}
+
 header .nav-brand ul li {
   margin-left: 24px;
 }
@@ -75,9 +87,9 @@ header nav .nav-sections {
 }
 
 header nav .nav-sections .default-content-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: 1rem;
 }
 
 header nav .nav-sections ul {
@@ -93,24 +105,27 @@ header nav .nav-sections ul {
 header nav .nav-sections ul li {
   display: inline-block;
   line-height: 1rem;
+  margin-right: 16px;
 }
 
 header nav .nav-sections ul li a {
   display: inline-block;
   line-height: 1rem;
   text-underline-position: under;
+  white-space: nowrap;
 }
 
 header nav .nav-sections ul:first-of-type {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 215px;
-  margin-right: 215px;
+  grid-column: 1/ span 2;
 }
 
-header nav .nav-sections ul:last-of-type li {
-  margin-right: 28px;
+header nav .nav-sections ul:last-of-type {
+  grid-column: 5 / span 4;
+  padding-right: 28px;
+  justify-content: flex-end;
 }
 
 header nav .nav-sections p:first-of-type {
@@ -121,6 +136,7 @@ header nav .nav-sections p:first-of-type {
   padding: .25rem;
   display: flex;
   align-items: center;
+  grid-column: 9/ span 3;
 }
 
 header nav .nav-sections p:first-of-type span {
@@ -142,6 +158,7 @@ header nav .nav-sections p:first-of-type span img {
 header nav .nav-sections .button-container {
   display: flex;
   align-items: center;
+  grid-column: 12/ span 1;
 }
 
 header nav .nav-sections .button-container a {
@@ -160,7 +177,7 @@ header nav .nav-tools ul {
   font-size: .75rem;
   color: var(--text-color);
   padding: 0;
-  margin: 16px 0;
+  max-height: 50px;
 }
 
 header nav .nav-tools ul li:first-of-type:hover a {
@@ -179,6 +196,72 @@ header nav .nav-tools ul li:last-of-type:before {
   width: fit-content;
 }
 
-@media (width <= 900px) {
+@media (width >= 1400px) {
+  header nav .nav-sections li {
+    margin-right: 28px;
+  }
+}
 
+@media (width <= 1000px) {
+  header nav {
+    height: var(--mobile-nav-height);
+  }
+
+  header .nav-sections {
+    display: none;
+    visibility: hidden;
+  }
+
+  header nav .nav-brand {
+    height: 56px;
+    box-shadow: 0 0 .75rem #ccccd2;
+  }
+
+  header nav .nav-brand ul {
+    display: none;
+    visibility: hidden;
+  }
+
+  header nav .nav-brand .default-content-wrapper {
+    position: relative;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  header nav .nav-brand .default-content-wrapper p:last-of-type {
+    display: block;
+    visibility: visible;
+  }
+
+  header nav .nav-brand .default-content-wrapper p:last-of-type a {
+    color: var(--link-hover-color);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  header nav .nav-brand .default-content-wrapper p {
+    margin: 0;
+  }
+  
+  header nav .nav-brand .default-content-wrapper p a {
+    display: block;
+  }
+
+  header nav .nav-brand .default-content-wrapper p a:hover {
+    text-decoration: none;
+  }
+
+  header nav .nav-brand .default-content-wrapper p:first-of-type {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (width <= 600px) {
+  header .nav-brand .default-content-wrapper,
+  header .nav-tools .default-content-wrapper {
+    padding: 0 1rem;
+  }
 }
