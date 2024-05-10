@@ -1,5 +1,10 @@
 # US Bank Edge Delivery Document-Based Authoring Demo...
-Demo for US Bank
+Mockup of US Bank landing page and article page to showcase how efficient development in Edge Delivery Services is.
+
+Landing Page:
+https://www.usbank.com/financialiq/manage-your-household.html
+Article:
+https://www.usbank.com/financialiq/manage-your-household/establish-credit/how-to-maximize-your-credit-card-rewards.html 
 
 ## Environments
 - Preview: https://main--usbank--AdobeDevXSC.hlx.page/
