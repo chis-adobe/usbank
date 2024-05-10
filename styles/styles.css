@@ -276,8 +276,3 @@ main .section.highlight {
   .hlx-preview-overlay .hlx-badge .hlx-popup * {
 	font-size: 14px;
 }
-
-.hlx-badge {
-  background-color: var(--link-hover-color) !important;
-  color: var(--light-color) !important;
-}
