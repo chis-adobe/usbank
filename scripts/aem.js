@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Adobe. All rights reserved.
+ * Copyright 2023 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -22,9 +22,6 @@
  * for instance the href of a link, or a search term
  */
 function sampleRUM(checkpoint, data = {}) {
-  const SESSION_STORAGE_KEY = 'aem-rum';
-  sampleRUM.baseURL = sampleRUM.baseURL
-    || new URL(window.RUM_BASE == null ? 'https://rum.hlx.page' : window.RUM_BASE, window.location);
   sampleRUM.defer = sampleRUM.defer || [];
   const defer = (fnname) => {
     sampleRUM[fnname] = sampleRUM[fnname] || ((...args) => sampleRUM.defer.push({ fnname, args }));
@@ -56,21 +53,12 @@ function sampleRUM(checkpoint, data = {}) {
         .join('');
       const random = Math.random();
       const isSelected = random * weight < 1;
-      const firstReadTime = window.performance ? window.performance.timeOrigin : Date.now();
+      const firstReadTime = Date.now();
       const urlSanitizers = {
         full: () => window.location.href,
         origin: () => window.location.origin,
         path: () => window.location.href.replace(/\?.*$/, ''),
       };
-      // eslint-disable-next-line max-len
-      const rumSessionStorage = sessionStorage.getItem(SESSION_STORAGE_KEY)
-        ? JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY))
-        : {};
-      // eslint-disable-next-line max-len
-      rumSessionStorage.pages = (rumSessionStorage.pages ? rumSessionStorage.pages : 0)
-        + 1
-        /* noise */ + (Math.floor(Math.random() * 20) - 10);
-      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(rumSessionStorage));
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = {
         weight,
@@ -80,10 +68,8 @@ function sampleRUM(checkpoint, data = {}) {
         firstReadTime,
         sampleRUM,
         sanitizeURL: urlSanitizers[window.hlx.RUM_MASK_URL || 'path'],
-        rumSessionStorage,
       };
     }
-
     const { weight, id, firstReadTime } = window.hlx.rum;
     if (window.hlx && window.hlx.rum && window.hlx.rum.isSelected) {
       const knownProperties = [
@@ -99,35 +85,32 @@ function sampleRUM(checkpoint, data = {}) {
         'FID',
         'LCP',
         'INP',
-        'TTFB',
       ];
       const sendPing = (pdata = data) => {
-        // eslint-disable-next-line max-len
-        const t = Math.round(
-          window.performance ? window.performance.now() : Date.now() - firstReadTime,
-        );
         // eslint-disable-next-line object-curly-newline, max-len, no-use-before-define
         const body = JSON.stringify(
           {
-            weight, id, referer: window.hlx.rum.sanitizeURL(), checkpoint, t, ...data,
+            weight,
+            id,
+            referer: window.hlx.rum.sanitizeURL(),
+            checkpoint,
+            t: Date.now() - firstReadTime,
+            ...data,
           },
           knownProperties,
         );
-        const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
+        const url = `https://rum.hlx.page/.rum/${weight}`;
+        // eslint-disable-next-line no-unused-expressions
         navigator.sendBeacon(url, body);
         // eslint-disable-next-line no-console
         console.debug(`ping:${checkpoint}`, pdata);
       };
       sampleRUM.cases = sampleRUM.cases || {
-        load: () => sampleRUM('pagesviewed', { source: window.hlx.rum.rumSessionStorage.pages }) || true,
         cwv: () => sampleRUM.cwv(data) || true,
         lazy: () => {
           // use classic script to avoid CORS issues
           const script = document.createElement('script');
-          script.src = new URL(
-            '.rum/@adobe/helix-rum-enhancer@^1/src/index.js',
-            sampleRUM.baseURL,
-          ).href;
+          script.src = 'https://rum.hlx.page/.rum/@adobe/helix-rum-enhancer@^1/src/index.js';
           document.head.appendChild(script);
           return true;
         },
@@ -145,6 +128,125 @@ function sampleRUM(checkpoint, data = {}) {
   }
 }
 
+class PluginsRegistry {
+  #plugins;
+
+  static parsePluginParams(id, config) {
+    const pluginId = !config
+      ? id
+        .split('/')
+        .splice(id.endsWith('/') ? -2 : -1, 1)[0]
+        .replace(/\.js/, '')
+      : id;
+    const pluginConfig = {
+      load: 'eager',
+      ...(typeof config === 'string' || !config
+        ? { url: (config || id).replace(/\/$/, '') }
+        : config),
+    };
+    pluginConfig.options ||= {};
+    return { id: pluginId, config: pluginConfig };
+  }
+
+  constructor() {
+    this.#plugins = new Map();
+  }
+
+  // Register a new plugin
+  add(id, config) {
+    const { id: pluginId, config: pluginConfig } = PluginsRegistry.parsePluginParams(id, config);
+    this.#plugins.set(pluginId, pluginConfig);
+  }
+
+  // Get the plugin
+  get(id) {
+    return this.#plugins.get(id);
+  }
+
+  // Check if the plugin exists
+  includes(id) {
+    return !!this.#plugins.has(id);
+  }
+
+  // Load all plugins that are referenced by URL, and updated their configuration with the
+  // actual API they expose
+  async load(phase, context) {
+    [...this.#plugins.entries()]
+      .filter(
+        ([, plugin]) => plugin.condition && !plugin.condition(document, plugin.options, context),
+      )
+      .map(([id]) => this.#plugins.delete(id));
+    return Promise.all(
+      [...this.#plugins.entries()]
+        // Filter plugins that don't match the execution conditions
+        .filter(
+          ([, plugin]) => (!plugin.condition || plugin.condition(document, plugin.options, context))
+            && phase === plugin.load
+            && plugin.url,
+        )
+        .map(async ([key, plugin]) => {
+          try {
+            // If the plugin has a default export, it will be executed immediately
+            const pluginApi = (await loadModule(
+              !plugin.url.endsWith('.js')
+                ? `${plugin.url}/${plugin.url.split('/').pop()}.js`
+                : plugin.url,
+              !plugin.url.endsWith('.js')
+                ? `${plugin.url}/${plugin.url.split('/').pop()}.css`
+                : null,
+              document,
+              plugin.options,
+              context,
+            )) || {};
+            this.#plugins.set(key, { ...plugin, ...pluginApi });
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            //console.error('Could not load specified plugin', key);
+            //this.#plugins.delete(key);
+          }
+        }),
+    );
+  }
+
+  // Run a specific phase in the plugin
+  async run(phase, context) {
+    return [...this.#plugins.values()].reduce(
+      (
+        promise,
+        p, // Using reduce to execute plugins sequencially
+      ) => (p[phase] && (!p.condition || p.condition(document, p.options, context))
+        ? promise.then(() => p[phase](document, p.options, context))
+        : promise),
+      Promise.resolve(),
+    );
+  }
+}
+class TemplatesRegistry {
+  // Register a new template
+  // eslint-disable-next-line class-methods-use-this
+  add(id, url) {
+    if (Array.isArray(id)) {
+      id.forEach((i) => this.add(i));
+      return;
+    }
+    const { id: templateId, config: templateConfig } = PluginsRegistry.parsePluginParams(id, url);
+    templateConfig.condition = () => toClassName(getMetadata('template')) === templateId;
+    window.hlx.plugins.add(templateId, templateConfig);
+  }
+
+  // Get the template
+  // eslint-disable-next-line class-methods-use-this
+  get(id) {
+    return window.hlx.plugins.get(id);
+  }
+
+  // Check if the template exists
+  // eslint-disable-next-line class-methods-use-this
+  includes(id) {
+    return window.hlx.plugins.includes(id);
+  }
+}
+
 /**
  * Setup block utils.
  */
@@ -153,6 +255,9 @@ function setup() {
   window.hlx.RUM_MASK_URL = 'full';
   window.hlx.codeBasePath = '';
   window.hlx.lighthouse = new URLSearchParams(window.location.search).get('lighthouse') === 'on';
+  window.hlx.patchBlockConfig = [];
+  window.hlx.plugins = new PluginsRegistry();
+  window.hlx.templates = new TemplatesRegistry();
 
   const scriptEl = document.querySelector('script[src$="/scripts/scripts.js"]');
   if (scriptEl) {
@@ -299,12 +404,11 @@ async function loadScript(src, attrs) {
 /**
  * Retrieves the content of metadata tags.
  * @param {string} name The metadata name (or property)
- * @param {Document} doc Document object to query for metadata. Defaults to the window's document
  * @returns {string} The metadata value(s)
  */
-function getMetadata(name, doc = document) {
+function getMetadata(name) {
   const attr = name && name.includes(':') ? 'property' : 'name';
-  const meta = [...doc.head.querySelectorAll(`meta[${attr}="${name}"]`)]
+  const meta = [...document.head.querySelectorAll(`meta[${attr}="${name}"]`)]
     .map((m) => m.content)
     .join(', ');
   return meta || '';
@@ -373,48 +477,6 @@ function decorateTemplateAndTheme() {
 }
 
 /**
- * Wrap inline text content of block cells within a <p> tag.
- * @param {Element} block the block element
- */
-function wrapTextNodes(block) {
-  const validWrappers = [
-    'P',
-    'PRE',
-    'UL',
-    'OL',
-    'PICTURE',
-    'TABLE',
-    'H1',
-    'H2',
-    'H3',
-    'H4',
-    'H5',
-    'H6',
-  ];
-
-  const wrap = (el) => {
-    const wrapper = document.createElement('p');
-    wrapper.append(...el.childNodes);
-    el.append(wrapper);
-  };
-
-  block.querySelectorAll(':scope > div > div').forEach((blockColumn) => {
-    if (blockColumn.hasChildNodes()) {
-      const hasWrapper = !!blockColumn.firstElementChild
-        && validWrappers.some((tagName) => blockColumn.firstElementChild.tagName === tagName);
-      if (!hasWrapper) {
-        wrap(blockColumn);
-      } else if (
-        blockColumn.firstElementChild.tagName === 'PICTURE'
-        && (blockColumn.children.length > 1 || !!blockColumn.textContent.trim())
-      ) {
-        wrap(blockColumn);
-      }
-    }
-  });
-}
-
-/**
  * Decorates paragraphs containing a single link as buttons.
  * @param {Element} element container element
  */
@@ -452,12 +514,88 @@ function decorateButtons(element) {
   });
 }
 
+const ICONS_CACHE = {};
 /**
- * Add <img> for icon, prefixed with codeBasePath and optional prefix.
- * @param {Element} [span] span element with icon classes
- * @param {string} [prefix] prefix to be added to icon src
- * @param {string} [alt] alt text to be added to icon
+ * Replace icons with inline SVG and prefix with codeBasePath.
+ * @param {Element} [element] Element containing icons
  */
+/*
+async function decorateIcons(element) {
+  // Prepare the inline sprite
+  let svgSprite = document.getElementById('franklin-svg-sprite');
+  if (!svgSprite) {
+    const div = document.createElement('div');
+    div.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" id="franklin-svg-sprite" style="display: none"></svg>';
+    svgSprite = div.firstElementChild;
+    document.body.append(div.firstElementChild);
+  }
+
+
+  
+
+  // Download all new icons
+  const icons = [...element.querySelectorAll('span.icon')];
+  await Promise.all(
+    icons.map(async (span) => {
+      const iconName = Array.from(span.classList)
+        .find((c) => c.startsWith('icon-'))
+        .substring(5);
+      if (!ICONS_CACHE[iconName]) {
+        ICONS_CACHE[iconName] = true;
+        try {
+          const response = await fetch(`${window.hlx.codeBasePath}/icons/${iconName}.svg`);
+          if (!response.ok) {
+            ICONS_CACHE[iconName] = false;
+            return;
+          }
+          // Styled icons don't play nice with the sprite approach because of shadow dom isolation
+          const svg = await response.text();
+          if (svg.match(/(<style | class=)/)) {
+            ICONS_CACHE[iconName] = { styled: true, html: svg };
+          } else {
+            ICONS_CACHE[iconName] = {
+              html: svg
+                .replace('<svg', `<symbol id="icons-sprite-${iconName}"`)
+                .replace(/ width=".*?"/, '')
+                .replace(/ height=".*?"/, '')
+                .replace('</svg>', '</symbol>'),
+            };
+          }
+        } catch (error) {
+          ICONS_CACHE[iconName] = false;
+          // eslint-disable-next-line no-console
+          console.error(error);
+        }
+      }
+    }),
+  );
+
+
+
+
+  const symbols = Object.keys(ICONS_CACHE)
+    .filter((k) => !svgSprite.querySelector(`#icons-sprite-${k}`))
+    .map((k) => ICONS_CACHE[k])
+    .filter((v) => !v.styled)
+    .map((v) => v.html)
+    .join('\n');
+  svgSprite.innerHTML += symbols;
+
+  icons.forEach((span) => {
+    const iconName = Array.from(span.classList)
+      .find((c) => c.startsWith('icon-'))
+      .substring(5);
+    const parent = span.firstElementChild?.tagName === 'A' ? span.firstElementChild : span;
+    // Styled icons need to be inlined as-is, while unstyled ones can leverage the sprite
+    if (ICONS_CACHE[iconName].styled) {
+      parent.innerHTML = ICONS_CACHE[iconName].html;
+    } else {
+      parent.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg"><use href="#icons-sprite-${iconName}"/></svg>`;
+    }
+  });
+}
+*/
+
 function decorateIcon(span, prefix = '', alt = '') {
   const iconName = Array.from(span.classList)
     .find((c) => c.startsWith('icon-'))
@@ -471,18 +609,12 @@ function decorateIcon(span, prefix = '', alt = '') {
   span.append(img);
 }
 
-/**
- * Add <img> for icons, prefixed with codeBasePath and optional prefix.
- * @param {Element} [element] Element containing icons
- * @param {string} [prefix] prefix to be added to icon the src
- */
 function decorateIcons(element, prefix = '') {
   const icons = [...element.querySelectorAll('span.icon')];
   icons.forEach((span) => {
     decorateIcon(span, prefix);
   });
 }
-
 /**
  * Decorates all sections in a container element.
  * @param {Element} main The container element
@@ -511,10 +643,7 @@ function decorateSections(main) {
       const meta = readBlockConfig(sectionMeta);
       Object.keys(meta).forEach((key) => {
         if (key === 'style') {
-          const styles = meta.style
-            .split(',')
-            .filter((style) => style)
-            .map((style) => toClassName(style.trim()));
+          const styles = meta.style.split(',').map((style) => toClassName(style.trim()));
           styles.forEach((style) => section.classList.add(style));
         } else {
           section.dataset[toCamelCase(key)] = meta[key];
@@ -678,7 +807,6 @@ function decorateBlock(block) {
     block.classList.add('block');
     block.dataset.blockName = shortBlockName;
     block.dataset.blockStatus = 'initialized';
-    wrapTextNodes(block);
     const blockWrapper = block.parentElement;
     blockWrapper.classList.add(`${shortBlockName}-wrapper`);
     const section = block.closest('.section');
@@ -767,5 +895,4 @@ export {
   toClassName,
   updateSectionsStatus,
   waitForLCP,
-  wrapTextNodes,
 };

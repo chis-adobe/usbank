@@ -263,3 +263,16 @@ main .section.highlight {
     padding: 48px 1rem;
   }
 }
+
+/* Experimentation Widget Styling */
+.hlx-preview-overlay .hlx-badge {
+	padding: 1rem 2rem;
+	font-size: 16px;
+	line-height: normal;
+  background-color: var(--link-hover-color);
+  color: var(--light-color);
+}
+  
+  .hlx-preview-overlay .hlx-badge .hlx-popup * {
+	font-size: 14px;
+}
