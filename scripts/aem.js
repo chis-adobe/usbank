@@ -519,6 +519,7 @@ const ICONS_CACHE = {};
  * Replace icons with inline SVG and prefix with codeBasePath.
  * @param {Element} [element] Element containing icons
  */
+/*
 async function decorateIcons(element) {
   // Prepare the inline sprite
   let svgSprite = document.getElementById('franklin-svg-sprite');
@@ -528,6 +529,9 @@ async function decorateIcons(element) {
     svgSprite = div.firstElementChild;
     document.body.append(div.firstElementChild);
   }
+
+
+  
 
   // Download all new icons
   const icons = [...element.querySelectorAll('span.icon')];
@@ -566,6 +570,9 @@ async function decorateIcons(element) {
     }),
   );
 
+
+
+
   const symbols = Object.keys(ICONS_CACHE)
     .filter((k) => !svgSprite.querySelector(`#icons-sprite-${k}`))
     .map((k) => ICONS_CACHE[k])
@@ -587,7 +594,27 @@ async function decorateIcons(element) {
     }
   });
 }
+*/
 
+function decorateIcon(span, prefix = '', alt = '') {
+  const iconName = Array.from(span.classList)
+    .find((c) => c.startsWith('icon-'))
+    .substring(5);
+  const img = document.createElement('img');
+  img.dataset.iconName = iconName;
+  img.className = 'svg';
+  img.src = `${window.hlx.codeBasePath}${prefix}/icons/${iconName}.svg`;
+  img.alt = alt;
+  img.loading = 'lazy';
+  span.append(img);
+}
+
+function decorateIcons(element, prefix = '') {
+  const icons = [...element.querySelectorAll('span.icon')];
+  icons.forEach((span) => {
+    decorateIcon(span, prefix);
+  });
+}
 /**
  * Decorates all sections in a container element.
  * @param {Element} main The container element
