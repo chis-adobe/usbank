@@ -200,7 +200,7 @@
 
 .hlx-badge.is-active,
 .hlx-badge[aria-pressed="true"] {
-  --color: var(--highlight-color);
+  --color: var(--link-hover-color);
 }
 
 .hlx-badge.is-inactive,
